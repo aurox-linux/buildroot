@@ -67,9 +67,6 @@ fi
 mkdir -p "$ZSH_CACHE_DIR/completions"
 (( ${fpath[(Ie)$ZSH_CACHE_DIR/completions]} )) || fpath=("$ZSH_CACHE_DIR/completions" $fpath)
 
-# Check for updates on initial load...
-source "$ZSH/tools/check_for_upgrade.sh"
-
 # Initializes Oh My Zsh
 
 # add a function path
@@ -97,13 +94,7 @@ for plugin ($plugins); do
   fi
 done
 
-# Figure out the SHORT hostname
-if [[ "$OSTYPE" = darwin* ]]; then
-  # macOS's $HOST changes with dhcp, etc. Use LocalHostName if possible.
-  SHORT_HOST=$(scutil --get LocalHostName 2>/dev/null) || SHORT_HOST="${HOST/.*/}"
-else
-  SHORT_HOST="${HOST/.*/}"
-fi
+SHORT_HOST="${HOST/.*/}"
 
 # Save the location of the current completion dump file.
 if [[ -z "$ZSH_COMPDUMP" ]]; then
