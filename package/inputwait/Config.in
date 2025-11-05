@@ -1,0 +1,4 @@
+config BR2_PACKAGE_INPUTWAIT
+    bool "inputwait"
+    help
+      Allows the user to test whether an event device emits a keypress over a specified timeout period.
