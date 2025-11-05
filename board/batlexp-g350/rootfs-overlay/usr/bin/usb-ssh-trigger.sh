@@ -38,31 +38,29 @@ if inputwait "$INPUT_DEV" "$KEY_TYPE" "$KEY_CODE" "$VALUES" "$TIMEOUT"; then
     mkdir -p functions/rndis.usb0
     mkdir -p functions/ecm.usb0
 
-    echo "02:00:00:00:00:01" > functions/rndis.usb0/dev_addr
-    echo "02:00:00:00:00:02" > functions/rndis.usb0/host_addr
-    echo "02:00:00:00:00:03" > functions/ecm.usb0/dev_addr
-    echo "02:00:00:00:00:04" > functions/ecm.usb0/host_addr
-
-
-
     echo 1       > os_desc/use
     echo 0xCD    > os_desc/b_vendor_code
     echo MSFT100 > os_desc/qw_sign
 
     echo RNDIS   > functions/rndis.usb0/os_desc/interface.rndis/compatible_id
     echo 5162001 > functions/rndis.usb0/os_desc/interface.rndis/sub_compatible_id
-
     ln -s configs/c.1 os_desc
+
+    echo "02:00:00:00:00:01" > functions/rndis.usb0/dev_addr
+    echo "02:00:00:00:00:02" > functions/rndis.usb0/host_addr
+    echo "02:00:00:00:00:03" > functions/ecm.usb0/dev_addr
+    echo "02:00:00:00:00:04" > functions/ecm.usb0/host_addr
+
     ln -s functions/rndis.usb0 configs/c.1/
     ln -s functions/ecm.usb0 configs/c.1/
 
     echo "$(ls /sys/class/udc | head -n 1)" > UDC
 
     ip link set usb0 up 2>/dev/null || true
-    ip addr add 10.0.0.1/24
+    ip addr add 10.0.0.1/24 dev usb0 2>/dev/null || true
 
     ip link set usb1 up 2>/dev/null || true
-    ip addr add 10.0.1.1/24
+    ip addr add 10.0.1.1/24 dev usb1 2>/dev/null || true
 
     systemctl enable --now sshd.service
     echo "USB SSH gadget enabled."
