@@ -20,6 +20,7 @@ IgnoreRhosts                  yes
 
 PasswordAuthentication        yes
 PermitEmptyPasswords          yes
+PermitUserEnvironment         yes
 KbdInteractiveAuthentication  yes
 
 # Subsystems

@@ -6,7 +6,7 @@ Before=multi-user.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/usb-ssh-trigger.sh
+ExecStart=/usr/bin/usb-ssh-trigger
 RemainAfterExit=no
 StandardOutput=journal
 

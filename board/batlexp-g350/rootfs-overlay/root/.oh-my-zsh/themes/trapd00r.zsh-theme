@@ -41,8 +41,6 @@ zsh_path() {
   setopt localoptions nopromptsubst
 
   local colors
-  colors=$(echoti colors)
-
   local -A yellow
   yellow=(
     1  '%F{228}'   2  '%F{222}'   3  '%F{192}'   4  '%F{186}'
