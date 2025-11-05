@@ -1,0 +1,26 @@
+Port                          22
+AddressFamily                 any
+ListenAddress                 0.0.0.0
+ListenAddress                 ::
+
+LoginGraceTime                1m
+PermitRootLogin               yes
+StrictModes                   yes
+
+PubkeyAuthentication          yes
+
+AuthorizedKeysFile            .ssh/authorized_keys
+AuthorizedPrincipalsFile      none
+AuthorizedKeysCommand         none
+AuthorizedKeysCommandUser     nobody
+
+HostbasedAuthentication       no
+IgnoreUserKnownHosts          no
+IgnoreRhosts                  yes
+
+PasswordAuthentication        yes
+PermitEmptyPasswords          yes
+KbdInteractiveAuthentication  yes
+
+# Subsystems
+Subsystem sftp                /usr/libexec/sftp-server

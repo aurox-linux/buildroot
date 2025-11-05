@@ -1,0 +1,71 @@
+#!/bin/sh
+
+INPUT_DEV="/dev/input/event4" # Volume Keys Event Source (see Batlexp G350 DTS for details)
+KEY_TYPE="KEY"
+KEY_CODE="115"                # Volume Up
+VALUES="1,2"
+TIMEOUT="250"
+
+if inputwait "$INPUT_DEV" "$KEY_TYPE" "$KEY_CODE" "$VALUES" "$TIMEOUT"; then
+    echo "Key detected, enabling USB SSH gadget..."
+
+    if [ -d /sys/kernel/config/usb_gadget/g1 ]; then
+        echo "" > /sys/kernel/config/usb_gadget/g1/UDC
+        rm -rf /sys/kernel/config/usb_gadget/g1
+    fi
+
+    mkdir -p /sys/kernel/config/usb_gadget/g1
+    cd /sys/kernel/config/usb_gadget/g1
+
+    echo 0x1d6b > idVendor
+    echo 0x0104 > idProduct
+    echo 0x0100 > bcdDevice
+    echo 0x0200 > bcdUSB
+
+    echo 0xEF > bDeviceClass
+    echo 0x02 > bDeviceSubClass
+    echo 0x01 > bDeviceProtocol
+
+    mkdir -p strings/0x409
+    echo "AUR0X-UWU-NYA" > strings/0x409/serialnumber
+    echo "Aurox Project" > strings/0x409/manufacturer
+    echo "USB SSH Gadget" > strings/0x409/product
+
+    mkdir -p configs/c.1/strings/0x409
+    echo "ECM+RNDIS" > configs/c.1/strings/0x409/configuration
+    echo 120 > configs/c.1/MaxPower
+
+    mkdir -p functions/rndis.usb0
+    mkdir -p functions/ecm.usb0
+
+    echo "02:00:00:00:00:01" > functions/rndis.usb0/dev_addr
+    echo "02:00:00:00:00:02" > functions/rndis.usb0/host_addr
+    echo "02:00:00:00:00:03" > functions/ecm.usb0/dev_addr
+    echo "02:00:00:00:00:04" > functions/ecm.usb0/host_addr
+
+
+
+    echo 1       > os_desc/use
+    echo 0xCD    > os_desc/b_vendor_code
+    echo MSFT100 > os_desc/qw_sign
+
+    echo RNDIS   > functions/rndis.usb0/os_desc/interface.rndis/compatible_id
+    echo 5162001 > functions/rndis.usb0/os_desc/interface.rndis/sub_compatible_id
+
+    ln -s configs/c.1 os_desc
+    ln -s functions/rndis.usb0 configs/c.1/
+    ln -s functions/ecm.usb0 configs/c.1/
+
+    echo "$(ls /sys/class/udc | head -n 1)" > UDC
+
+    ip link set usb0 up 2>/dev/null || true
+    ip addr add 10.0.0.1/24
+
+    ip link set usb1 up 2>/dev/null || true
+    ip addr add 10.0.1.1/24
+
+    systemctl enable --now sshd.service
+    echo "USB SSH gadget enabled."
+else
+    echo "No key press detected within ${TIMEOUT}ms, skipping gadget setup."
+fi

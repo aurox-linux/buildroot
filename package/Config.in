@@ -523,6 +523,7 @@ endmenu
 	source "package/i2c-tools/Config.in"
 	source "package/i7z/Config.in"
 	source "package/input-event-daemon/Config.in"
+	source "package/inputwait/Config.in"
 	source "package/intel-microcode/Config.in"
 	source "package/iotools/Config.in"
 	source "package/ipmitool/Config.in"

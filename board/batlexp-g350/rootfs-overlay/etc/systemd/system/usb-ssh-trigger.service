@@ -1,0 +1,14 @@
+[Unit]
+Description=SSH over USB gadget
+DefaultDependencies=no
+After=sysinit.target
+Before=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/usb-ssh-trigger.sh
+RemainAfterExit=no
+StandardOutput=journal
+
+[Install]
+WantedBy=multi-user.target
