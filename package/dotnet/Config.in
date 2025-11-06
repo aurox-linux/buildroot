@@ -1,4 +1,4 @@
-config BR2_PACKAGE_DOTNET_RUNTIME
+config BR2_PACKAGE_DOTNET
     bool "dotnet"
     help
       Installs .NET runtime for the selected architecture.
