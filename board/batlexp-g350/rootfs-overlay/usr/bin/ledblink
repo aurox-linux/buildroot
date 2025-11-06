@@ -1,0 +1,26 @@
+#!/usr/bin/lua
+
+-- Usage: ledblink <led_name> <blinks> <interval_sec>
+
+local led_name = arg[1]
+local blinks = tonumber(arg[2])
+local interval = tonumber(arg[3])
+
+if not led_name or not blinks or not interval then
+    print("Usage: "..arg[0].." <led_name> <blinks> <interval_sec>")
+    os.exit(1)
+end
+
+local brightness_file = "/sys/class/leds/"..led_name.."/brightness"
+
+for i = 1, blinks do
+    local f = io.open(brightness_file, "w")
+    f:write("1")
+    f:close()
+    os.execute("sleep "..interval)
+
+    f = io.open(brightness_file, "w")
+    f:write("0")
+    f:close()
+    os.execute("sleep "..interval)
+end

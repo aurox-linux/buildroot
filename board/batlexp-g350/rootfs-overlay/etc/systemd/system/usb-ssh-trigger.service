@@ -2,13 +2,15 @@
 Description=SSH over USB gadget
 DefaultDependencies=no
 After=sysinit.target
+Wants=sshd.service
 Before=multi-user.target
 
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/usb-ssh-trigger
+ExecStartPost=/usr/bin/lua /usr/bin/ledblink red:charging 3 0.1
 RemainAfterExit=no
 StandardOutput=journal
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=emergency.target rescue.target multi-user.target

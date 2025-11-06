@@ -64,7 +64,6 @@ if inputwait "$INPUT_DEV" "$KEY_TYPE" "$KEY_CODE" "$VALUES" "$TIMEOUT"; then
 
     echo 1 > /proc/sys/net/ipv4/ip_forward
 
-    systemctl enable --now sshd.service
     echo "USB SSH gadget enabled."
 else
     echo "No key press detected within ${TIMEOUT}ms, skipping gadget setup."
