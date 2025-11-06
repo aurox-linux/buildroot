@@ -1,0 +1,5 @@
+config BR2_PACKAGE_LUA_EVDEV
+	bool "lua-evdev"
+	select BR2_PACKAGE_LIBEVDEV
+  help
+    A Lua 5.2+ module for interacting with input devices on Linux.
